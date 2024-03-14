@@ -53,8 +53,7 @@ class HomePage extends StatelessWidget {
                               .map((e) => Card(
                                     child: ListTile(
                                       onTap: () {
-                                        FirestoreHelper.firestoreHelper
-                                            .createchatroomid(
+                                        FirestoreHelper.firestoreHelper.createChatRoomId(
                                           Authcontroller.currentuser!.email!,
                                           e.email,
                                         );

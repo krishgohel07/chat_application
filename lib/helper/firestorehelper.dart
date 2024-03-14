@@ -9,6 +9,7 @@ class FirestoreHelper {
   static final FirestoreHelper firestoreHelper = FirestoreHelper._();
 
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  String? imageUrl;
 
   Future<void> addusertoFireStoreDatabase(UserData userData) async {
     print("function called");
@@ -32,63 +33,69 @@ class FirestoreHelper {
     return data;
   }
 
-  void createchatroomid(String u1, String u2) async {
-    List<FetchChatuserId> fetcheduserid = [];
+
+  Future<void> createChatRoomId(String u1, String u2) async {
+    List<FetchChatuserId> fetchedChatsId = [];
     QuerySnapshot querySnapshot =
-        await firebaseFirestore.collection('chats').get();
+    await firebaseFirestore.collection('chats').get();
+
     List<QueryDocumentSnapshot> data = querySnapshot.docs;
+
     if (data.isEmpty) {
       Authcontroller.chatroomid = "${u1}_$u2";
       await firebaseFirestore
           .collection('chats')
           .doc(Authcontroller.chatroomid)
-          .set({'chat_id':Authcontroller.chatroomid});
+          .set({
+        'chat_id': Authcontroller.chatroomid,
+      });
       print(Authcontroller.chatroomid);
-
+      print("====================");
     } else {
-      fetcheduserid = data.map((e) {
-        String fetchuser1 = e['chat_id'].toString().split("_")[0];
-        String fetchuser2 = e['chat_id'].toString().split("_")[1];
-        print(fetchuser1);
-        print(fetchuser2);
-        return FetchChatuserId(user1: fetchuser1, user2: fetchuser2);
+      fetchedChatsId = data.map((e) {
+        String fetchUser1 = e['chat_id'].toString().split("_")[0];
+        String fetchUser2 = e['chat_id'].toString().split("_")[1];
+        return FetchChatuserId(user1: fetchUser1, user2: fetchUser2);
       }).toList();
-      bool alreadyId = false;
-      for (var element in fetcheduserid) {
-        print("++++++++222222222222");
-        alreadyId = alreadyexist(u1, u2, element);
-        if (alreadyId==true) {
-          print(alreadyId);
-          print("otoioinhoihnroihnrohnroihnroihnroihnrtho");
+
+      for (var e in fetchedChatsId) {
+        print("u1 = ${e.user1}");
+        print("u2 = ${e.user2}");
+      }
+      bool? alreadyId = false;
+      for (var element in fetchedChatsId) {
+        alreadyId = alreadyIdExists(u1, u2, element);
+        if (alreadyId) {
           break;
         }
       }
       if (alreadyId == false) {
-        Authcontroller.chatroomid="${u1}_$u2";
-        print("+++++++++++++++++++++++++++++++");
-        print(Authcontroller.chatroomid);
+        Authcontroller.chatroomid = "${u1}_$u2";
         await firebaseFirestore
             .collection('chats')
             .doc(Authcontroller.chatroomid)
             .set({
-          'chat_id':Authcontroller.chatroomid
-            });
+          'chat_id': Authcontroller.chatroomid,
+        });
         print(Authcontroller.chatroomid);
+        print("----------_____________");
       }
     }
   }
 
-  bool alreadyexist(String u1, String u2, FetchChatuserId element) {
-    if (u1 == element.user1 || u1 == element.user2 &&
-        u2 == element.user1 || u2 == element.user2) {
+
+  bool alreadyIdExists(String u1, String u2, FetchChatuserId element) {
+    if ((u1 == element.user1 || u1 == element.user2) &&
+        (u2 == element.user1 || u2 == element.user2)) {
       if (u1 == element.user1 && u2 == element.user2) {
-        print("3333333333333333333333333333333333");
         Authcontroller.chatroomid = "${u1}_$u2";
+        print(Authcontroller.chatroomid);
+        print("++++++++++++++++++++++++");
       } else {
-        print("444444444444444444444444444444444444444444");
         Authcontroller.chatroomid = "${u2}_$u1";
+        print(Authcontroller.chatroomid);
+        print("-------------////////////");
       }
-      print("${u1}_${u2}");
       return true;
     }
     return false;
@@ -104,8 +111,19 @@ class FirestoreHelper {
         .set({
       'sender': sender,
       'reciever': reciever,
+      'type': (imageUrl != null) ? 'img' : 'text',
       'message': message,
       'time': DateTime.now()
     });
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMessages() {
+    return firebaseFirestore
+        .collection('chats')
+        .doc(Authcontroller.chatroomid)
+        .collection('messages')
+        .orderBy('time', descending: false)
+        .snapshots();
+  }
+
 }
