@@ -18,7 +18,7 @@ class Loginscreen extends StatelessWidget {
     return Scaffold(
         body: FlutterLogin(
             logo: 'assets/chat-bubbles.png',
-            title: 'Chat',
+            title: 'MyChat',
             hideForgotPasswordButton: true,
             loginAfterSignUp: false,
             theme: LoginTheme(

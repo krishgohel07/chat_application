@@ -60,7 +60,6 @@ class HomePage extends StatelessWidget {
                                         );
                                         Get.toNamed('chatpage', arguments: e);
                                       },
-                                      leading: const FlutterLogo(size: 45),
                                       title: Text(e.name),
                                       subtitle: Text(e.email),
                                     ),
