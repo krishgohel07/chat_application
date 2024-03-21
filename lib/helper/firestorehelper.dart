@@ -111,7 +111,6 @@ class FirestoreHelper {
         .set({
       'sender': sender,
       'reciever': reciever,
-      'type': (imageUrl != null) ? 'img' : 'text',
       'message': message,
       'time': DateTime.now()
     });
@@ -121,9 +120,10 @@ class FirestoreHelper {
     return firebaseFirestore
         .collection('chats')
         .doc(Authcontroller.chatroomid)
-        .collection('messages')
+        .collection('message')
         .orderBy('time', descending: false)
         .snapshots();
   }
+
 
 }

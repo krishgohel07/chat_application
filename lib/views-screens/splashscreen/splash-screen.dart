@@ -12,6 +12,8 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
+          height: 100,
+          width: 100,
           decoration: BoxDecoration(
               image:
                   DecorationImage(image: AssetImage("assets/chat-bubbles.png"))),

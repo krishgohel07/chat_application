@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
                   SliverAppBar(
                     actions: [
                       IconButton(
-                          onPressed: () {
+                          onPressed: () async {
                             Get.offAllNamed('login');
                           },
                           icon: Icon(Icons.exit_to_app))
@@ -52,8 +52,9 @@ class HomePage extends StatelessWidget {
                           homepagecontroller.fetchedalldata
                               .map((e) => Card(
                                     child: ListTile(
-                                      onTap: () {
-                                        FirestoreHelper.firestoreHelper.createChatRoomId(
+                                      onTap: () async {
+                                        await FirestoreHelper.firestoreHelper
+                                            .createChatRoomId(
                                           Authcontroller.currentuser!.email!,
                                           e.email,
                                         );

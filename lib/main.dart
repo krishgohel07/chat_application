@@ -6,7 +6,6 @@ import 'package:chat_application/views-screens/splashscreen/splash-screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'firebase_options.dart';
 
 void main() async {
@@ -18,7 +17,8 @@ void main() async {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+   MainApp({super.key});
+  bool? islogout;
 
   @override
   Widget build(BuildContext context) {
